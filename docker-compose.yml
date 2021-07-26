@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_DB: "valorizeDB"
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbdevdata:/var/lib/data
+volumes:
+  dbdevdata:

@@ -13,8 +13,9 @@ module.exports = {
   plugins: [
     ['module-resolver', {
       alias: {
-        '@providers': './src/providers',
-        '@useCases': './src/useCases'
+        '@config': './src/config',
+        '@modules': './src/modules',
+        '@shared': './src/shared'
       }
     }]
   ],

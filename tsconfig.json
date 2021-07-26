@@ -21,8 +21,9 @@
     "forceConsistentCasingInFileNames": true, 
     "baseUrl": ".",
     "paths": {
-      "@providers/*": ["./src/providers/*"],
-      "@useCases/*": ["./src/useCases/*"]
+      "@config/*": ["./src/config/*"],
+      "@modules/*": ["./src/modules/*"],
+      "@shared/*": ["./src/shared/*"]
     }      
   },
   "include": [
