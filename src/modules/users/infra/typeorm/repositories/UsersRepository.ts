@@ -10,11 +10,18 @@ export class UsersRepository implements IUsersRepository {
     return user
   }
 
-  public async create ({ name, email, admin }: ICreateUserDTO): Promise<User> {
+  public async findById (id: string): Promise<User | undefined> {
+    const ormUsersRepository: Repository<User> = getRepository(User)
+    const user = await ormUsersRepository.findOne(id)
+    return user
+  }
+
+  public async create ({ name, email, password, admin }: ICreateUserDTO): Promise<User> {
     const ormUsersRepository: Repository<User> = getRepository(User)
     const user = ormUsersRepository.create({
       name,
       email,
+      password,
       admin
     })
 
