@@ -16,6 +16,12 @@ export class TagsRepository implements ITagsRepository {
     return tag
   }
 
+  public async findAllTags (): Promise<Tag[] | undefined> {
+    const ormTagsRepository: Repository<Tag> = getRepository(Tag)
+    const tags = await ormTagsRepository.find()
+    return tags
+  }
+
   public async create ({ name }: ICreateTagDTO): Promise<Tag> {
     const ormTagsRepository: Repository<Tag> = getRepository(Tag)
     const tag = ormTagsRepository.create({ name })
