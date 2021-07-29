@@ -22,11 +22,6 @@ export class UsersRepository implements IUsersRepository {
 
   public async findAllUsers (): Promise<User[] | undefined> {
     const users = await this.ormUsersRepository.find()
-
-    users.forEach((user) => {
-      delete user.password
-    })
-
     return users
   }
 

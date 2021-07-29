@@ -18,10 +18,6 @@ export class ComplimentsRepository implements IComplimentsRepository {
       relations: ['userSender', 'tag']
     })
 
-    compliments.forEach((compliment) => {
-      delete compliment.userSender.password
-    })
-
     return compliments
   }
 
@@ -31,10 +27,6 @@ export class ComplimentsRepository implements IComplimentsRepository {
         userSenderId: userId
       },
       relations: ['userReceiver', 'tag']
-    })
-
-    compliments.forEach((compliment) => {
-      delete compliment.userReceiver.password
     })
 
     return compliments

@@ -1,4 +1,5 @@
 import { ListUserReceiveComplimentsService } from '@modules/compliments/services/ListUserReceiveComplimentsService'
+import { classToClass } from 'class-transformer'
 import { Request, Response } from 'express'
 import { container } from 'tsyringe'
 
@@ -12,6 +13,6 @@ export class ListUserReceiveComplimentsController {
 
     const compliments = await listUserReceiveComplimentsService.execute(userId)
 
-    return res.status(200).json(compliments)
+    return res.status(200).json(classToClass(compliments))
   }
 }
