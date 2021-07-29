@@ -13,10 +13,6 @@ class CreateUserService {
   ) {}
 
   async execute ({ name, email, password, admin = false }: ICreateUserDTO): Promise<User> {
-    if (!email) {
-      throw new AppError('Email incorrect')
-    }
-
     const userAlreadyExists = await this.usersRepository.findByEmail(email)
 
     if (userAlreadyExists) {

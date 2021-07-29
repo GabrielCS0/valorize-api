@@ -12,8 +12,6 @@ export class CreateTagService {
   ) {}
 
   async execute ({ name }: ICreateTagDTO): Promise<Tag> {
-    if (!name) throw new AppError('Incorrect name')
-
     const tagAlreadyExists = await this.tagsRepository.findByName(name)
 
     if (tagAlreadyExists) throw new AppError('Tag already exists')
