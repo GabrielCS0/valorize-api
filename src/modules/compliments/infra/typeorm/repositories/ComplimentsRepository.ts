@@ -4,9 +4,14 @@ import { getRepository, Repository } from 'typeorm'
 import { Compliment } from '../entities/Compliment'
 
 export class ComplimentsRepository implements IComplimentsRepository {
+  private ormComplimentsRepository: Repository<Compliment>
+
+  constructor () {
+    this.ormComplimentsRepository = getRepository(Compliment)
+  }
+
   public async findComplimentsFromReceiveUser (userId: string): Promise<Compliment[] | undefined> {
-    const ormComplimentRepository: Repository<Compliment> = getRepository(Compliment)
-    const compliments = await ormComplimentRepository.find({
+    const compliments = await this.ormComplimentsRepository.find({
       where: {
         userReceiverId: userId
       },
@@ -21,8 +26,7 @@ export class ComplimentsRepository implements IComplimentsRepository {
   }
 
   public async findComplimentsFromSenderUser (userId: string): Promise<Compliment[] | undefined> {
-    const ormComplimentRepository: Repository<Compliment> = getRepository(Compliment)
-    const compliments = await ormComplimentRepository.find({
+    const compliments = await this.ormComplimentsRepository.find({
       where: {
         userSenderId: userId
       },
@@ -42,8 +46,7 @@ export class ComplimentsRepository implements IComplimentsRepository {
     tagId,
     message
   }: ICreateComplimentDTO): Promise<Compliment> {
-    const ormComplimentRepository: Repository<Compliment> = getRepository(Compliment)
-    const compliment = ormComplimentRepository.create({
+    const compliment = this.ormComplimentsRepository.create({
       userSenderId,
       userReceiverId,
       tagId,
@@ -54,7 +57,6 @@ export class ComplimentsRepository implements IComplimentsRepository {
   }
 
   public async save (compliment: Compliment): Promise<void> {
-    const ormComplimentRepository: Repository<Compliment> = getRepository(Compliment)
-    await ormComplimentRepository.save(compliment)
+    await this.ormComplimentsRepository.save(compliment)
   }
 }

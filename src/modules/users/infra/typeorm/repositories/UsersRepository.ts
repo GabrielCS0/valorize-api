@@ -4,21 +4,24 @@ import { getRepository, Repository } from 'typeorm'
 import { User } from '../entities/User'
 
 export class UsersRepository implements IUsersRepository {
+  private ormUsersRepository: Repository<User>
+
+  constructor () {
+    this.ormUsersRepository = getRepository(User)
+  }
+
   public async findByEmail (email: string): Promise<User | undefined> {
-    const ormUsersRepository: Repository<User> = getRepository(User)
-    const user = await ormUsersRepository.findOne({ email })
+    const user = await this.ormUsersRepository.findOne({ email })
     return user
   }
 
   public async findById (id: string): Promise<User | undefined> {
-    const ormUsersRepository: Repository<User> = getRepository(User)
-    const user = await ormUsersRepository.findOne(id)
+    const user = await this.ormUsersRepository.findOne(id)
     return user
   }
 
   public async findAllUsers (): Promise<User[] | undefined> {
-    const ormUsersRepository: Repository<User> = getRepository(User)
-    const users = await ormUsersRepository.find()
+    const users = await this.ormUsersRepository.find()
 
     users.forEach((user) => {
       delete user.password
@@ -28,8 +31,7 @@ export class UsersRepository implements IUsersRepository {
   }
 
   public async create ({ name, email, password, admin }: ICreateUserDTO): Promise<User> {
-    const ormUsersRepository: Repository<User> = getRepository(User)
-    const user = ormUsersRepository.create({
+    const user = this.ormUsersRepository.create({
       name,
       email,
       password,
@@ -40,7 +42,6 @@ export class UsersRepository implements IUsersRepository {
   }
 
   public async save (user: User): Promise<void> {
-    const ormUsersRepository: Repository<User> = getRepository(User)
-    await ormUsersRepository.save(user)
+    await this.ormUsersRepository.save(user)
   }
 }
