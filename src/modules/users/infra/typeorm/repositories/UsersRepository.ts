@@ -16,6 +16,17 @@ export class UsersRepository implements IUsersRepository {
     return user
   }
 
+  public async findAllUsers (): Promise<User[] | undefined> {
+    const ormUsersRepository: Repository<User> = getRepository(User)
+    const users = await ormUsersRepository.find()
+
+    users.forEach((user) => {
+      delete user.password
+    })
+
+    return users
+  }
+
   public async create ({ name, email, password, admin }: ICreateUserDTO): Promise<User> {
     const ormUsersRepository: Repository<User> = getRepository(User)
     const user = ormUsersRepository.create({
