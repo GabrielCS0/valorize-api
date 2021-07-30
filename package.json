@@ -4,24 +4,19 @@
   "main": "index.js",
   "author": "Gabriel <gabrielcemp@gmail.com>",
   "license": "MIT",
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.ts": [
-      "eslint --fix",
-      "cross-env CI=true yarn test --bail --findRelatedTests",
-      "git add"
-    ]
-  },
   "scripts": {
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "start": "node -r dotenv/config dist/shared/infra/http/server.js",
     "dev": "tsnd -r tsconfig-paths/register -r dotenv/config --respawn --transpile-only --ignore-watch node_modules --no-notify src/shared/infra/http/server.ts",
     "typeorm": "tsnd -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "eslint --fix",
+      "cross-env CI=true yarn test --bail --findRelatedTests"
+    ]
   },
   "devDependencies": {
     "@babel/cli": "^7.14.8",
@@ -44,7 +39,7 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "husky": "^7.0.1",
+    "husky": "^7.0.0",
     "jest": "^27.0.6",
     "lint-staged": "^11.1.1",
     "ts-jest": "^27.0.3",
