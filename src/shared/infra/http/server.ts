@@ -6,10 +6,12 @@ import 'express-async-errors'
 import { router } from './routes'
 import { AppError } from '@shared/errors/AppError'
 import { errors } from 'celebrate'
+import { rateLimiter } from './middlewares/rateLimiter'
 
 const app = express()
 
 app.use(express.json())
+app.use(rateLimiter)
 app.use(router)
 
 app.use(errors())
