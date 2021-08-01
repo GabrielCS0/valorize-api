@@ -31,6 +31,10 @@ usersRouter.post('/login', celebrate({
 
 usersRouter.get('/', ensureAuthenticate, listUsersController.handle)
 
-usersRouter.post('/refresh-token', userRefreshTokenController.handle)
+usersRouter.post('/refresh-token', celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    refreshTokenId: Joi.string().uuid().required()
+  })
+}), userRefreshTokenController.handle)
 
 export { usersRouter }
