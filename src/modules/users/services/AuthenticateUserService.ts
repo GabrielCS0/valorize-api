@@ -2,14 +2,28 @@ import { AppError } from '@shared/errors/AppError'
 import { inject, injectable } from 'tsyringe'
 import { IAuthenticateUserDTO } from '../dtos/IAuthenticateUserDTO'
 import { IUsersRepository } from '../repositories/IUsersRepository'
-import { compare } from 'bcryptjs'
-import { sign } from 'jsonwebtoken'
+import { IRefreshTokenProvider } from '../providers/RefreshTokenProvider/models/IRefreshTokenProvider'
+import { ITokenProvider } from '../providers/TokenProvider/models/ITokenProvider'
+import { IHashPasswordProvider } from '../providers/HashPasswordProvider/models/IHashPasswordProvider'
+import { IRefreshTokenRepository } from '../repositories/IRefreshTokenRepository'
 
 @injectable()
 export class AuthenticateUserService {
   constructor (
     @inject('UsersRepository')
-    private usersRepository: IUsersRepository
+    private usersRepository: IUsersRepository,
+
+    @inject('RefreshTokenRepository')
+    private refreshTokenRepository: IRefreshTokenRepository,
+
+    @inject('RefreshTokenProvider')
+    private refreshTokenProvider: IRefreshTokenProvider,
+
+    @inject('TokenProvider')
+    private tokenProvider: ITokenProvider,
+
+    @inject('HashPasswordProvider')
+    private hashPasswordProvider: IHashPasswordProvider
   ) {}
 
   async execute ({ email, password }: IAuthenticateUserDTO): Promise<Object> {
@@ -17,18 +31,16 @@ export class AuthenticateUserService {
 
     if (!user) throw new AppError('Email or Password incorrect')
 
-    const matchPassword = await compare(password, user.password)
+    const matchPassword = await this.hashPasswordProvider
+      .compareHash(password, user.password)
 
     if (!matchPassword) throw new AppError('Email or Password incorrect')
 
-    const token = sign({
-      email: user.email
-    },
-    process.env.JWT_SECRET, {
-      subject: user.id,
-      expiresIn: '1d'
-    })
+    const token = this.tokenProvider.generateToken(user.email, user.id)
 
-    return { token }
+    await this.refreshTokenRepository.deleteByUserId(user.id)
+    const refreshToken = await this.refreshTokenProvider.generateToken(user.id)
+
+    return { token, refreshToken }
   }
 }

@@ -2,14 +2,17 @@ import { AppError } from '@shared/errors/AppError'
 import { inject, injectable } from 'tsyringe'
 import { ICreateUserDTO } from '../dtos/ICreateUserDTO'
 import { User } from '../infra/typeorm/entities/User'
+import { IHashPasswordProvider } from '../providers/HashPasswordProvider/models/IHashPasswordProvider'
 import { IUsersRepository } from '../repositories/IUsersRepository'
-import { hash } from 'bcryptjs'
 
 @injectable()
 class CreateUserService {
   constructor (
     @inject('UsersRepository')
-    private usersRepository: IUsersRepository
+    private usersRepository: IUsersRepository,
+
+    @inject('HashPasswordProvider')
+    private hashPasswordProvider: IHashPasswordProvider
   ) {}
 
   async execute ({ name, email, password, admin = false }: ICreateUserDTO): Promise<User> {
@@ -19,7 +22,8 @@ class CreateUserService {
       throw new AppError('User already exists')
     }
 
-    const hashedPassword = await hash(password, 8)
+    const hashedPassword = await this.hashPasswordProvider
+      .generateHash(password)
 
     const user = await this.usersRepository.create({
       name,

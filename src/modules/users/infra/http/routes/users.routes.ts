@@ -3,6 +3,7 @@ import { Router } from 'express'
 import { AuthenticateUserController } from '../controllers/AuthenticateUserController'
 import { CreateUserController } from '../controllers/CreateUserController'
 import { ListUsersController } from '../controllers/ListUsersController'
+import { UserRefreshTokenController } from '../controllers/UserRefreshTokenController'
 import { ensureAuthenticate } from '../middlewares/ensureAuthenticated'
 
 const usersRouter = Router()
@@ -10,6 +11,7 @@ const usersRouter = Router()
 const createUserController = new CreateUserController()
 const authenticateUserController = new AuthenticateUserController()
 const listUsersController = new ListUsersController()
+const userRefreshTokenController = new UserRefreshTokenController()
 
 usersRouter.post('/', celebrate({
   [Segments.BODY]: Joi.object().keys({
@@ -28,5 +30,7 @@ usersRouter.post('/login', celebrate({
 }), authenticateUserController.handle)
 
 usersRouter.get('/', ensureAuthenticate, listUsersController.handle)
+
+usersRouter.post('/refresh-token', userRefreshTokenController.handle)
 
 export { usersRouter }
