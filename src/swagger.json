@@ -1,0 +1,432 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Valorize API Documentation",
+    "description": "API Description",
+    "contact": {
+      "email": "gabrielcemp@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000",
+      "description": "Development environment"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "summary": "User registration",
+        "description": "This endpoint is responsible for registering a new user",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "name": "Gabriel Cordeiro",
+                    "email": "gabrielcemp@gmail.com",
+                    "password": "secretPassword",
+                    "admin": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "User already exists"
+          },
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List all users",
+        "description": "This endpoint is responsible for listing all users",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "User authentication",
+        "description": "This endpoint is responsible for authenticate a user",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User-Authentication"
+              },
+              "examples": {
+                "user-authentication": {
+                  "value": {
+                    "email": "gabrielcemp@gmail.com",
+                    "password": "secretPassword"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Email or Password incorrect"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Token-RefreshToken-Response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/refresh-token": {
+      "post": {
+        "summary": "Get a new token",
+        "description": "This endpoint is responsible for getting a new token by refresh token id",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshToken"
+              },
+              "examples": {
+                "refreshTokenId": {
+                  "value": {
+                    "refreshTokenId": "62426f6d-d035-4766-9eb5-45fe0161959c"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Refresh Token does not exists"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Token-RefreshToken-Response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tags": {
+      "post": {
+        "summary": "Create a new Tag",
+        "description": "This endpoint is responsible for creating a new tag",
+        "tags": ["Tags"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Create-tag"
+              },
+              "examples": {
+                "user-authentication": {
+                  "value": {
+                    "name": "Proactive"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Tag already exists"
+          },
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Create-tag-response"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List all tags",
+        "description": "This endpoint is responsible for listing all tags",
+        "tags": ["Tags"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Create-tag-response"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/compliments": {
+      "post": {
+        "summary": "Create a new compliment",
+        "description": "This endpoint is responsible for creating a new compliment",
+        "tags": ["Compliments"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Compliment"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "userReceiverId": "99e50623-a192-43cf-9e06-8ad6f81f8b1f",
+                    "tagId": "0249d0dc-0e02-442a-b564-ff53a7c70a11",
+                    "message": "Thank you for your help!"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Fill in the data correctly"
+          },
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Compliment-response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/compliments/user/receive": {
+      "get": {
+        "summary": "List all compliments received",
+        "description": "This endpoint is responsible for listing all compliments received",
+        "tags": ["Compliments"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Compliment-response"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "compliments/user/send": {
+      "get": {
+        "summary": "List all compliments sent",
+        "description": "This endpoint is responsible for listing all compliments sent",
+        "tags": ["Compliments"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Compliment-response"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "admin": {
+            "type": "boolean"
+          }
+        }
+      },
+      "User-Authentication": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+      }
+    },
+    "Token-RefreshToken-Response": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "expiresIn": {
+              "type": "number"
+            },
+            "userId": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "RefreshToken": {
+      "type": "object",
+      "properties": {
+        "refreshTokenId": {
+          "type": "string"
+        }
+      }
+    },
+    "Create-Tag": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "Create-tag-response": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "Compliment": {
+      "type": "object",
+      "properties": {
+        "userReceiverId": {
+          "type": "string"
+        },
+        "tagId": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Compliment-response": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "userSenderId": {
+          "type": "string"
+        },
+        "userReceiverId": {
+          "type": "string"
+        },
+        "tagId": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT" 
+      }
+    }
+  }
+}
