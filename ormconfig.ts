@@ -8,11 +8,11 @@ module.exports = {
   synchronize: false,
   logging: false,
   entities: [
-    './src/modules/**/infra/typeorm/entities/*.ts',
+    './src/modules/**/infra/typeorm/entities/*.ts'
     // './dist/modules/**/infra/typeorm/entities/*.js'
   ],
   migrations: [
-    './src/shared/infra/database/migrations/*.ts',
+    './src/shared/infra/database/migrations/*.ts'
     // './dist/shared/infra/database/migrations/*.js'
   ],
   cli: {
